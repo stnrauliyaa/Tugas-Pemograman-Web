@@ -4,10 +4,195 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daftar Publikasi Penelitian Dosen &ndash; Teknik Informatika Unhas</title>
+<style>
+  :root {
+    --merah-unhas: #bd0d24;
+    --abu: #f4f4f4;
+    --teks: #222;
+    --garis: #ccc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--teks);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem 3rem;
+    line-height: 1.6;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    background-color: var(--merah-unhas);
+    padding: 1.5rem 2rem;
+    margin: 0 calc(50% - 50vw);
+    margin-bottom: 1.5rem;
+  }
+  header .logo img {
+    height: 70px;
+    width: auto;
+    flex-shrink: 0;
+  }
+  header .garis-pemisah {
+    width: 2px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+  }
+  header .judul-instansi h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  header .judul-instansi p {
+    margin: 0.15rem 0 0;
+    font-size: 1.15rem;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  header .judul-instansi small {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: #f4d9d9;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  h2 {
+    color: var(--merah-unhas);
+    border-left: 5px solid var(--merah-unhas);
+    padding-left: 0.6rem;
+    margin-top: 2.5rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin-top: 1rem;
+  }
+  caption {
+    text-align: left;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    color: #555;
+  }
+  thead th {
+    background-color: var(--merah-unhas);
+    color: #fff;
+    padding: 0.6rem 0.5rem;
+    border: 1px solid var(--garis);
+  }
+  tbody td, tbody th {
+    border: 1px solid var(--garis);
+    padding: 0.55rem 0.5rem;
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background-color: var(--abu); }
+  tbody th[scope="rowgroup"] {
+    background-color: #fdecec;
+    font-weight: 600;
+    text-align: left;
+  }
+  tfoot td {
+    border: 1px solid var(--garis);
+    padding: 0.6rem 0.5rem;
+    background-color: #eee;
+    font-weight: 600;
+    text-align: center;
+  }
+  a { color: var(--merah-unhas); }
+  ol.daftar-keahlian { padding-left: 1.4rem; }
+  ol.daftar-keahlian > li {
+    margin-bottom: 1.1rem;
+    font-weight: 600;
+  }
+  ol.daftar-keahlian ul {
+    font-weight: 400;
+    margin-top: 0.4rem;
+  }
+  ol.daftar-keahlian ul li { margin-bottom: 0.3rem; }
+  figure {
+    text-align: center;
+    background: var(--abu);
+    padding: 1rem;
+    border: 1px solid var(--garis);
+    border-radius: 6px;
+  }
+  figcaption {
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+    color: #555;
+    font-style: italic;
+  }
+  dl.keterangan-kode {
+    background: var(--abu);
+    border: 1px solid var(--garis);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  dl.keterangan-kode dt {
+    font-weight: 600;
+    color: var(--merah-unhas);
+  }
+  dl.keterangan-kode dd { margin: 0 0 0.6rem; }
+  footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--garis);
+    font-size: 0.85rem;
+    color: #666;
+    text-align: center;
+  }
+</style>
 </head>
 <body>
 
+<header>
+  <div class="logo">
+    <img src="assets/logo-unhas.png" alt="Logo Universitas Hasanuddin">
+  </div>
+  <div class="garis-pemisah"></div>
+  <div class="judul-instansi">
+    <h1>Departemen Teknik Informatika</h1>
+    <p>Universitas Hasanuddin</p>
+    <small>Daftar Publikasi Penelitian Dosen</small>
+  </div>
+</header>
+
 <main>
+
+<section id="tabel-publikasi">
+    <h2>Tabel Publikasi Dosen</h2>
+    <table>
+      <caption>Sepuluh publikasi pilihan dari lima dosen Teknik Informatika Unhas, mencakup jenis IB, I, dan T</caption>
+      <thead>
+        <tr>
+          <th rowspan="2" scope="col">No</th>
+          <th rowspan="2" scope="col">Nama Dosen</th>
+          <th colspan="3" scope="colgroup">Informasi Publikasi</th>
+          <th colspan="2" scope="colgroup">Referensi</th>
+        </tr>
+        <tr>
+          <th scope="col">Judul Publikasi</th>
+          <th scope="col">Tahun</th>
+          <th scope="col">Jenis Publikasi</th>
+          <th scope="col">Status Indeksasi</th>
+          <th scope="col">Link/DOI</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </section>
+
 </main>
 
 </body>
