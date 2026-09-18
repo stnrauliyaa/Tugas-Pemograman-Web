@@ -1,0 +1,12 @@
+/* ============================================================
+   1. RESET GLOBAL — model box-sizing: border-box
+   Supaya padding & border dihitung DI DALAM width yang
+   ditentukan, bukan menambah lebar total elemen.
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
