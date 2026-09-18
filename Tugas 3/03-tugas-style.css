@@ -99,3 +99,18 @@ body {
 .media-card__audio-wrapper audio {
   width: 100%;
 }
+
+/* ============================================================
+   4. UJI SPESIFISITAS CSS
+   Selector ".media-card.media-card--featured .media-card__description"
+   (spesifisitas 0,3,0) sengaja dibuat lebih tinggi dari
+   ".media-card__description" (0,1,0), agar menang tanpa !important.
+   ============================================================ */
+.media-card.media-card--featured .media-card__description {
+  color: #2563eb;
+  font-weight: 600;
+  background-color: #eff6ff;
+  padding: 8px 12px;
+  border-left: 4px solid #2563eb;
+  border-radius: 4px;
+}
