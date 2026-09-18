@@ -25,10 +25,15 @@
   <figure class="media-card__cover">
     <picture>
          <!-- Layar lebar (desktop, min-width 768px): gambar landscape -->
-        <source
+         <source
             media="(min-width: 768px)"
             srcset="assets/img/cover-desktop.webp"
             type="image/webp">
+         <!-- Layar sempit (mobile, max-width 767px): gambar potret/crop -->
+         <source
+          media="(max-width: 767px)"
+          srcset="assets/img/cover-mobile.webp"
+          type="image/webp">
     </picture>
   </figure>
 
