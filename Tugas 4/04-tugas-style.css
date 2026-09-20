@@ -76,3 +76,56 @@ body {
     gap: 0.5rem;
   }
 }
+
+/* ===== 3. Layout utama - CSS Grid kustom ===== */
+.layout-utama {
+  display: grid;
+  grid-template-columns: 200px 1fr 220px;
+  gap: 1.5rem;
+  max-width: 1280px;
+  margin: 2rem auto;
+  padding: 0 1.25rem;
+}
+
+/* ===== 4. Sidebar kiri (Departemen) ===== */
+.sidebar {
+  background-color: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  align-self: start;
+}
+
+.sidebar-judul {
+  background-color: var(--ui-navy);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar li:last-child {
+  border-bottom: none;
+}
+
+.sidebar a {
+  display: block;
+  padding: 0.85rem 1rem;
+  color: #333;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  background-color: #fff9e0;
+  color: var(--ui-navy);
+  font-weight: 600;
+}
