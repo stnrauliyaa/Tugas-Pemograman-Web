@@ -226,3 +226,37 @@ body {
   margin-bottom: 0.5rem;
   color: var(--ui-navy);
 }
+
+/* ===== 8. Responsif Tablet (di bawah 992px) ===== */
+@media (max-width: 991px) {
+  .layout-utama {
+    grid-template-columns: 200px 1fr;
+    grid-template-areas:
+      "sidebar artikel"
+      "kanan   kanan";
+  }
+
+  .sidebar { grid-area: sidebar; }
+  .daftar-artikel { grid-area: artikel; }
+  .kolom-kanan { grid-area: kanan; }
+}
+
+/* ===== 9. Responsif Mobile (di bawah 768px) ===== */
+@media (max-width: 768px) {
+  .layout-utama {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "sidebar"
+      "artikel"
+      "kanan";
+  }
+}
+
+/* ===== 10. Footer ===== */
+.footer-custom {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--ui-navy);
+  color: #cfcfcf;
+  margin-top: 2rem;
+}
