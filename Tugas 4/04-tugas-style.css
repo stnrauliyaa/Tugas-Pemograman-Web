@@ -129,3 +129,36 @@ body {
   color: var(--ui-navy);
   font-weight: 600;
 }
+
+/* ===== 7. Kolom kanan ===== */
+.pengumuman-box,
+.statistik-box {
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.25rem;
+  align-self: start;
+}
+
+.pengumuman-box {
+  background-color: var(--ui-navy);
+  color: #ffffff;
+}
+
+.pengumuman-judul {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+  color: var(--ui-kuning);
+}
+
+.statistik-box {
+  background-color: #ffffff;
+}
+
+.statistik-judul {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+  color: var(--ui-navy);
+}
