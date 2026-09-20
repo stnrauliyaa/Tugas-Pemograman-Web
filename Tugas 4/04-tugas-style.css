@@ -1,0 +1,19 @@
+/* ===== 0. Variabel warna identitas FTUI ===== */
+:root {
+  --ui-kuning: #ffd100;
+  --ui-navy: #0d1b2a;
+  --ui-navy-terang: #16324f;
+  --ui-abu: #f2f3f5;
+}
+
+/* ===== 1. Reset dasar ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: var(--ui-abu);
+  color: #212529;
+}
