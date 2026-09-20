@@ -130,6 +130,70 @@ body {
   font-weight: 600;
 }
 
+/* ===== 5. Kolom tengah ===== */
+.daftar-artikel h2 {
+  color: var(--ui-navy);
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.sub-judul {
+  color: #6c757d;
+  font-size: 0.85rem;
+  border-bottom: 2px solid #e2e2e2;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ===== 6. Grid mikro kartu artikel ===== */
+.grid-kartu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.grid-kartu .card {
+  height: 100%;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.badge-kategori {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
+}
+
+.badge-sipil   { background-color: #1d4e89; }
+.badge-elektro { background-color: #2e7d32; }
+.badge-mesin   { background-color: #b25400; }
+.badge-kimia   { background-color: #6a3d9a; }
+.badge-industri{ background-color: #b02a37; }
+.badge-arsi    { background-color: #146c60; }
+
+.btn-baca {
+  display: block;
+  text-align: center;
+  border: 1.5px solid var(--ui-navy);
+  color: var(--ui-navy);
+  border-radius: 4px;
+  padding: 0.55rem 1rem;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-baca:hover {
+  background-color: var(--ui-navy);
+  color: #ffffff;
+}
+
 /* ===== 7. Kolom kanan ===== */
 .pengumuman-box,
 .statistik-box {
