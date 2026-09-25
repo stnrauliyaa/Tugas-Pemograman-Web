@@ -101,6 +101,21 @@ $history = $_SESSION['history'];
   Saldo saat ini: <span>Rp <?= htmlspecialchars(number_format($balance, 2, ',', '.'), ENT_QUOTES, 'UTF-8') ?></span>
 </div>
 
+<?php if ($successMessage !== null): ?>
+  <div class="pesan-sukses"><?= htmlspecialchars($successMessage, ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
+
+<?php if (!empty($errors)): ?>
+  <div class="pesan-error">
+    <strong>Transaksi gagal:</strong>
+    <ul>
+      <?php foreach ($errors as $error): ?>
+        <li><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+<?php endif; ?>
+
 <form method="post" action="finance.php" novalidate>
   <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
 
@@ -115,6 +130,32 @@ $history = $_SESSION['history'];
 
   <button type="submit">Proses Transaksi</button>
 </form>
+
+<h2>Riwayat Transaksi</h2>
+<?php if (empty($history)): ?>
+  <p>Belum ada transaksi pada sesi ini.</p>
+<?php else: ?>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Jenis</th>
+        <th>Jumlah</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach (array_reverse($history) as $item): ?>
+        <tr>
+          <td><?= htmlspecialchars((string) $item['id'], ENT_QUOTES, 'UTF-8') ?></td>
+          <td class="tipe-<?= htmlspecialchars((string) $item['type'], ENT_QUOTES, 'UTF-8') ?>">
+            <?= htmlspecialchars($item['type'] === 'deposit' ? 'Deposit' : 'Penarikan', ENT_QUOTES, 'UTF-8') ?>
+          </td>
+          <td>Rp <?= htmlspecialchars(number_format((float) $item['amount'], 2, ',', '.'), ENT_QUOTES, 'UTF-8') ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+<?php endif; ?>
 
 </body>
 </html>
