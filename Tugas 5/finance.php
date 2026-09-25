@@ -91,6 +91,82 @@ $history = $_SESSION['history'];
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistem Manajemen Keuangan Sederhana</title>
+<style>
+  :root {
+    --hijau: #1f7a4d;
+    --merah: #b3261e;
+    --abu: #f4f4f4;
+    --garis: #ccc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    max-width: 720px;
+    margin: 2rem auto;
+    padding: 0 1rem 3rem;
+    color: #222;
+    line-height: 1.6;
+  }
+  h1 { color: var(--hijau); margin-bottom: 0.2rem; }
+  .saldo {
+    background: var(--abu);
+    border: 1px solid var(--garis);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 1rem 0 1.5rem;
+  }
+  .saldo span { color: var(--hijau); }
+  form {
+    background: #fff;
+    border: 1px solid var(--garis);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  label { display: block; font-weight: 600; margin: 0.7rem 0 0.3rem; }
+  select, input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--garis);
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  button {
+    margin-top: 1.2rem;
+    background: var(--hijau);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.9; }
+  .pesan-sukses, .pesan-error {
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+  .pesan-sukses { background: #e5f5ec; color: var(--hijau); border: 1px solid var(--hijau); }
+  .pesan-error { background: #fbe9e7; color: var(--merah); border: 1px solid var(--merah); }
+  .pesan-error ul { margin: 0.3rem 0 0; padding-left: 1.2rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+  }
+  th, td {
+    border: 1px solid var(--garis);
+    padding: 0.5rem 0.6rem;
+    text-align: left;
+    font-size: 0.92rem;
+  }
+  th { background: var(--abu); }
+  .tipe-deposit { color: var(--hijau); font-weight: 600; }
+  .tipe-withdraw { color: var(--merah); font-weight: 600; }
+</style>
 </head>
 <body>
 
