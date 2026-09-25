@@ -23,6 +23,44 @@ if (!isset($_SESSION['history'])) {
 $errors = [];
 $successMessage = null;
 
+// --- Proses form (POST) ---------------------------------------------------
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $submittedToken = $_POST['csrf_token'] ?? '';
+
+    if (!is_string($submittedToken) || !hash_equals($_SESSION['csrf_token'], $submittedToken)) {
+        $errors[] = 'Token keamanan (CSRF) tidak valid atau sudah kedaluwarsa. Silakan muat ulang halaman dan coba lagi.';
+    } else {
+        $typeInput = (string) ($_POST['type'] ?? '');
+        $amountInput = trim((string) ($_POST['amount'] ?? ''));
+
+        // Cocokkan jenis transaksi memakai ekspresi match (PHP 8)
+        $type = match ($typeInput) {
+            'deposit' => 'deposit',
+            'withdraw' => 'withdraw',
+            default => null,
+        };
+
+        if ($type === null) {
+            $errors[] = 'Jenis transaksi tidak valid. Pilih deposit atau penarikan.';
+        }
+
+        // Validasi jumlah: harus angka desimal positif (maks. 2 digit di belakang koma)
+        $amount = null;
+        if ($amountInput === '' || !preg_match('/^\d+(\.\d{1,2})?$/', $amountInput)) {
+            $errors[] = 'Jumlah transaksi harus berupa angka desimal positif (contoh: 50000 atau 50000.50).';
+        } else {
+            $amount = (float) $amountInput;
+            if ($amount <= 0.0) {
+                $errors[] = 'Jumlah transaksi harus lebih besar dari nol.';
+            }
+        }
+    }
+
+    // Regenerasi token setelah setiap submit agar tidak bisa dipakai ulang (mencegah replay)
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $csrfToken = $_SESSION['csrf_token'];
 $balance = (float) $_SESSION['balance'];
 $history = $_SESSION['history'];
