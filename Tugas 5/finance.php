@@ -55,8 +55,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors[] = 'Jumlah transaksi harus lebih besar dari nol.';
             }
         }
-    }
 
+                // Kalau semua validasi lolos, baru proses transaksi
+        if (empty($errors) && $type !== null && $amount !== null) {
+            $id = bin2hex(random_bytes(8));
+            $transaction = new Transaction($id, $type, $amount);
+
+            $balance = (float) $_SESSION['balance'];
+            $processed = $transaction->process($balance);
+
+            if ($processed) {
+                $_SESSION['balance'] = $balance;
+                $_SESSION['history'][] = $transaction->toArray();
+                $successMessage = $type === 'deposit'
+                    ? 'Deposit berhasil diproses.'
+                    : 'Penarikan berhasil diproses.';
+            } else {
+                $errors[] = 'Saldo tidak mencukupi untuk melakukan penarikan.';
+            }
+        }
+    }
+    
     // Regenerasi token setelah setiap submit agar tidak bisa dipakai ulang (mencegah replay)
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
