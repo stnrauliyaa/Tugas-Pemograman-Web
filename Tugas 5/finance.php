@@ -44,5 +44,20 @@ $history = $_SESSION['history'];
   Saldo saat ini: <span>Rp <?= htmlspecialchars(number_format($balance, 2, ',', '.'), ENT_QUOTES, 'UTF-8') ?></span>
 </div>
 
+<form method="post" action="finance.php" novalidate>
+  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+
+  <label for="type">Jenis Transaksi</label>
+  <select id="type" name="type" required>
+    <option value="deposit">Deposit</option>
+    <option value="withdraw">Penarikan</option>
+  </select>
+
+  <label for="amount">Jumlah (angka desimal positif)</label>
+  <input type="text" id="amount" name="amount" inputmode="decimal" placeholder="contoh: 50000.00" required>
+
+  <button type="submit">Proses Transaksi</button>
+</form>
+
 </body>
 </html>
