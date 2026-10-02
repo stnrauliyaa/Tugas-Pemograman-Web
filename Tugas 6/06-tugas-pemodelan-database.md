@@ -331,3 +331,121 @@ flowchart LR
 ```
 
 ---
+
+
+## 7. Implementasi SQL
+
+### 7.1 DDL (Pembuatan Tabel)
+
+```sql
+CREATE DATABASE IF NOT EXISTS elibrary_kampus;
+USE elibrary_kampus;
+
+CREATE TABLE mahasiswa (
+    nim             VARCHAR(15)  PRIMARY KEY,
+    nama_mahasiswa  VARCHAR(100) NOT NULL,
+    program_studi   VARCHAR(60)  NOT NULL,
+    email           VARCHAR(100) NOT NULL UNIQUE,
+    no_telepon      VARCHAR(15)
+);
+
+CREATE TABLE penerbit (
+    id_penerbit      INT AUTO_INCREMENT PRIMARY KEY,
+    nama_penerbit    VARCHAR(100) NOT NULL,
+    alamat_penerbit  VARCHAR(255),
+    kota_penerbit    VARCHAR(50),
+    telepon_penerbit VARCHAR(15)
+);
+
+CREATE TABLE buku (
+    id_buku       VARCHAR(10)  PRIMARY KEY,
+    isbn          VARCHAR(20)  NOT NULL UNIQUE,
+    judul_buku    VARCHAR(200) NOT NULL,
+    pengarang     VARCHAR(100) NOT NULL,
+    tahun_terbit  YEAR         NOT NULL,
+    stok          INT          NOT NULL DEFAULT 0 CHECK (stok >= 0),
+    id_penerbit   INT          NOT NULL,
+    CONSTRAINT fk_buku_penerbit
+        FOREIGN KEY (id_penerbit) REFERENCES penerbit(id_penerbit)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE peminjaman (
+    id_peminjaman        INT AUTO_INCREMENT PRIMARY KEY,
+    nim                  VARCHAR(15) NOT NULL,
+    tanggal_pinjam       DATE        NOT NULL,
+    tanggal_jatuh_tempo  DATE        NOT NULL,
+    CONSTRAINT fk_peminjaman_mahasiswa
+        FOREIGN KEY (nim) REFERENCES mahasiswa(nim)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE detail_peminjaman (
+    id_peminjaman    INT         NOT NULL,
+    id_buku          VARCHAR(10) NOT NULL,
+    tanggal_kembali  DATE,
+    denda            DECIMAL(10,2) NOT NULL DEFAULT 0,
+    status           ENUM('Dipinjam','Dikembalikan','Terlambat')
+                     NOT NULL DEFAULT 'Dipinjam',
+    PRIMARY KEY (id_peminjaman, id_buku),
+    CONSTRAINT fk_detail_peminjaman
+        FOREIGN KEY (id_peminjaman) REFERENCES peminjaman(id_peminjaman)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_detail_buku
+        FOREIGN KEY (id_buku) REFERENCES buku(id_buku)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+```
+
+### 7.2 DML (Data Contoh)
+
+Data berikut sama dengan data contoh pada simulasi normalisasi (bagian 3). Urutan `INSERT` mengikuti ketergantungan FK: tabel induk lebih dulu.
+
+```sql
+INSERT INTO mahasiswa (nim, nama_mahasiswa, program_studi, email, no_telepon) VALUES
+('2401001', 'Andi Saputra', 'Informatika',      'andi@kampus.ac.id', '081234567001'),
+('2401002', 'Siti Rahma',   'Sistem Informasi', 'siti@kampus.ac.id', '081234567002');
+
+INSERT INTO penerbit (id_penerbit, nama_penerbit, alamat_penerbit, kota_penerbit, telepon_penerbit) VALUES
+(1, 'Penerbit Informatika', 'Jl. Geger Kalong No. 10',   'Bandung', '022-1234567'),
+(2, 'Erlangga',             'Jl. H. Baping Raya No. 100', 'Jakarta', '021-7654321');
+
+INSERT INTO buku (id_buku, isbn, judul_buku, pengarang, tahun_terbit, stok, id_penerbit) VALUES
+('B01', '9786020000011', 'Basis Data',                'Rahmat Hidayat', 2020, 5, 1),
+('B02', '9786020000028', 'Algoritma dan Pemrograman', 'Dewi Lestari',   2019, 3, 2);
+
+INSERT INTO peminjaman (id_peminjaman, nim, tanggal_pinjam, tanggal_jatuh_tempo) VALUES
+(1, '2401001', '2026-09-01', '2026-09-08'),
+(2, '2401002', '2026-09-03', '2026-09-10');
+
+INSERT INTO detail_peminjaman (id_peminjaman, id_buku, tanggal_kembali, denda, status) VALUES
+(1, 'B01', '2026-09-07', 0,    'Dikembalikan'),
+(1, 'B02', '2026-09-10', 2000, 'Terlambat'),
+(2, 'B01', NULL,         0,    'Dipinjam');
+```
+
+### 7.3 Contoh Query Verifikasi
+
+Query berikut menggabungkan kelima tabel dan menampilkan data yang sama dengan data 1NF pada bagian 3.2.
+
+```sql
+SELECT p.id_peminjaman, m.nama_mahasiswa, b.judul_buku,
+       pb.nama_penerbit, p.tanggal_pinjam, d.tanggal_kembali,
+       d.denda, d.status
+FROM peminjaman p
+JOIN mahasiswa m          ON m.nim = p.nim
+JOIN detail_peminjaman d  ON d.id_peminjaman = p.id_peminjaman
+JOIN buku b               ON b.id_buku = d.id_buku
+JOIN penerbit pb          ON pb.id_penerbit = b.id_penerbit
+ORDER BY p.id_peminjaman, b.id_buku;
+```
+
+---
+
+## 8. Kesimpulan
+
+Rancangan basis data E-Library Kampus dinormalisasi dari UNF hingga **3NF** menjadi lima tabel: `mahasiswa`, `penerbit`, `buku`, `peminjaman`, dan `detail_peminjaman`. Pada tahap 1NF kelompok data berulang dipecah per baris, pada 2NF ketergantungan parsial terhadap kunci komposit dihilangkan, dan pada 3NF ketergantungan transitif (mahasiswa dan penerbit) dipisahkan ke tabel tersendiri. Tabel `detail_peminjaman` menyelesaikan relasi many-to-many antara transaksi dan buku sekaligus mencatat pengembalian dan denda per buku.
+
+## Referensi
+
+- Dokumentasi Mermaid, Entity Relationship Diagram: https://mermaid.js.org/syntax/entityRelationshipDiagram.html
