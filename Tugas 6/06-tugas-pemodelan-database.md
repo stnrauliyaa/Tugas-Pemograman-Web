@@ -157,3 +157,46 @@ Bagian 3 dari 3: data pengembalian:
 | 2 | B01 | NULL | 0 | Dipinjam |
 
 Masalah yang masih ada: **redundansi**. Data Andi Saputra tertulis 2 kali, data buku B01 dan Penerbit Informatika juga tertulis 2 kali. Hal ini rawan anomali *insert*, *update*, dan *delete*.
+
+
+### 3.3 2NF (Second Normal Form)
+
+Syarat: sudah 1NF dan **tidak ada ketergantungan parsial** (atribut non-kunci bergantung pada sebagian kunci komposit saja).
+
+Analisis ketergantungan fungsional terhadap PK **(id_peminjaman, id_buku)**:
+
+| Ketergantungan | Jenis |
+|---|---|
+| id_peminjaman → tanggal_pinjam, tanggal_jatuh_tempo, nim, nama_mahasiswa, program_studi, email, no_telepon | Parsial |
+| id_buku → isbn, judul_buku, pengarang, tahun_terbit, stok, id_penerbit, nama_penerbit, alamat_penerbit, kota_penerbit, telepon_penerbit | Parsial |
+| (id_peminjaman, id_buku) → tanggal_kembali, denda, status | Penuh |
+
+Hasil dekomposisi 2NF:
+
+- **Peminjaman**(**id_peminjaman**, tanggal_pinjam, tanggal_jatuh_tempo, nim, nama_mahasiswa, program_studi, email, no_telepon)
+- **Buku**(**id_buku**, isbn, judul_buku, pengarang, tahun_terbit, stok, id_penerbit, nama_penerbit, alamat_penerbit, kota_penerbit, telepon_penerbit)
+- **Detail_Peminjaman**(***id_peminjaman***, ***id_buku***, tanggal_kembali, denda, status)
+
+Setelah 2NF, data Andi Saputra cukup tertulis sekali per transaksi dan data buku B01 hanya satu baris. Namun masih ada redundansi data mahasiswa (jika Andi punya banyak transaksi) dan data penerbit (jika penerbit punya banyak buku).
+
+### 3.4 3NF (Third Normal Form)
+
+Syarat: sudah 2NF dan **tidak ada ketergantungan transitif** (atribut non-kunci bergantung pada atribut non-kunci lain).
+
+| Ketergantungan transitif | Penyelesaian |
+|---|---|
+| id_peminjaman → nim → nama_mahasiswa, program_studi, email, no_telepon | Pisahkan tabel **Mahasiswa**; `nim` tetap di Peminjaman sebagai FK |
+| id_buku → id_penerbit → nama_penerbit, alamat_penerbit, kota_penerbit, telepon_penerbit | Pisahkan tabel **Penerbit**; `id_penerbit` tetap di Buku sebagai FK |
+
+Hasil akhir **3NF**:
+
+- **Mahasiswa**(**nim**, nama_mahasiswa, program_studi, email, no_telepon)
+- **Penerbit**(**id_penerbit**, nama_penerbit, alamat_penerbit, kota_penerbit, telepon_penerbit)
+- **Buku**(**id_buku**, isbn, judul_buku, pengarang, tahun_terbit, stok, *id_penerbit*)
+- **Peminjaman**(**id_peminjaman**, *nim*, tanggal_pinjam, tanggal_jatuh_tempo)
+- **Detail_Peminjaman**(***id_peminjaman***, ***id_buku***, tanggal_kembali, denda, status)
+
+Setiap atribut non-kunci kini hanya bergantung pada kunci tabelnya, sehingga tidak ada redundansi dan anomali data.
+
+---
+
