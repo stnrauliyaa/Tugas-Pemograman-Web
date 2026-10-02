@@ -86,3 +86,74 @@ Entitas ini diwujudkan dalam dua tabel: **Peminjaman** (header) dan **Detail_Pem
 | status | Dipinjam / Dikembalikan / Terlambat | |
 
 ---
+
+
+## 3. Simulasi Normalisasi
+
+Seluruh tahap normalisasi memakai **data contoh yang sama** dengan data pada tabel akhir (bagian 7).
+
+### 3.1 UNF (Unnormalized Form)
+
+Data mentah dari formulir peminjaman. Terdapat **kelompok data berulang** (data buku dan penerbit, ditandai `{ }`).
+
+```
+Peminjaman(
+  id_peminjaman, tanggal_pinjam, tanggal_jatuh_tempo,
+  nim, nama_mahasiswa, program_studi, email, no_telepon,
+  { id_buku, isbn, judul_buku, pengarang, tahun_terbit, stok,
+    id_penerbit, nama_penerbit, alamat_penerbit, kota_penerbit, telepon_penerbit,
+    tanggal_kembali, denda, status }
+)
+```
+
+Contoh data UNF:
+
+| id_peminjaman | tanggal_pinjam | tanggal_jatuh_tempo | nim | nama_mahasiswa | program_studi | buku yang dipinjam |
+|---|---|---|---|---|---|---|
+| 1 | 2026-09-01 | 2026-09-08 | 2401001 | Andi Saputra | Informatika | B01 Basis Data (penerbit 1: Penerbit Informatika, Bandung); B02 Algoritma dan Pemrograman (penerbit 2: Erlangga, Jakarta) |
+| 2 | 2026-09-03 | 2026-09-10 | 2401002 | Siti Rahma | Sistem Informasi | B01 Basis Data (penerbit 1: Penerbit Informatika, Bandung) |
+
+Masalah: satu sel berisi lebih dari satu buku (*repeating group*).
+
+### 3.2 1NF (First Normal Form)
+
+Syarat: setiap atribut **atomik** dan **tidak ada kelompok berulang**. Setiap buku dalam satu transaksi dijadikan baris tersendiri, sehingga Primary Key menjadi **(id_peminjaman, id_buku)**.
+
+Skema 1NF:
+
+```
+Peminjaman_1NF(
+  id_peminjaman (PK), id_buku (PK),
+  tanggal_pinjam, tanggal_jatuh_tempo,
+  nim, nama_mahasiswa, program_studi, email, no_telepon,
+  isbn, judul_buku, pengarang, tahun_terbit, stok,
+  id_penerbit, nama_penerbit, alamat_penerbit, kota_penerbit, telepon_penerbit,
+  tanggal_kembali, denda, status
+)
+```
+
+Contoh data 1NF (bagian 1 dari 3: data transaksi dan mahasiswa):
+
+| **id_peminjaman** | **id_buku** | tanggal_pinjam | tanggal_jatuh_tempo | nim | nama_mahasiswa | program_studi | email | no_telepon |
+|---|---|---|---|---|---|---|---|---|
+| 1 | B01 | 2026-09-01 | 2026-09-08 | 2401001 | Andi Saputra | Informatika | andi@kampus.ac.id | 081234567001 |
+| 1 | B02 | 2026-09-01 | 2026-09-08 | 2401001 | Andi Saputra | Informatika | andi@kampus.ac.id | 081234567001 |
+| 2 | B01 | 2026-09-03 | 2026-09-10 | 2401002 | Siti Rahma | Sistem Informasi | siti@kampus.ac.id | 081234567002 |
+
+Bagian 2 dari 3: data buku dan penerbit (baris sama, urutan sama):
+
+| **id_peminjaman** | **id_buku** | isbn | judul_buku | pengarang | tahun_terbit | stok | id_penerbit | nama_penerbit | alamat_penerbit | kota_penerbit | telepon_penerbit |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | B01 | 9786020000011 | Basis Data | Rahmat Hidayat | 2020 | 5 | 1 | Penerbit Informatika | Jl. Geger Kalong No. 10 | Bandung | 022-1234567 |
+| 1 | B02 | 9786020000028 | Algoritma dan Pemrograman | Dewi Lestari | 2019 | 3 | 2 | Erlangga | Jl. H. Baping Raya No. 100 | Jakarta | 021-7654321 |
+| 2 | B01 | 9786020000011 | Basis Data | Rahmat Hidayat | 2020 | 5 | 1 | Penerbit Informatika | Jl. Geger Kalong No. 10 | Bandung | 022-1234567 |
+
+Bagian 3 dari 3: data pengembalian:
+
+| **id_peminjaman** | **id_buku** | tanggal_kembali | denda | status |
+|---|---|---|---|---|
+| 1 | B01 | 2026-09-07 | 0 | Dikembalikan |
+| 1 | B02 | 2026-09-10 | 2000 | Terlambat |
+| 2 | B01 | NULL | 0 | Dipinjam |
+
+Masalah yang masih ada: **redundansi**. Data Andi Saputra tertulis 2 kali, data buku B01 dan Penerbit Informatika juga tertulis 2 kali. Hal ini rawan anomali *insert*, *update*, dan *delete*.
