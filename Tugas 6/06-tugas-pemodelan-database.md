@@ -267,3 +267,67 @@ Setiap atribut non-kunci kini hanya bergantung pada kunci tabelnya, sehingga tid
 | Peminjaman ↔ Buku | M : N | diselesaikan oleh `detail_peminjaman` |
 
 ---
+
+
+## 6. Diagram ERD (Mermaid)
+
+```mermaid
+erDiagram
+    MAHASISWA ||--o{ PEMINJAMAN : "melakukan"
+    PENERBIT ||--o{ BUKU : "menerbitkan"
+    PEMINJAMAN ||--|{ DETAIL_PEMINJAMAN : "memiliki"
+    BUKU ||--o{ DETAIL_PEMINJAMAN : "dipinjam dalam"
+
+    MAHASISWA {
+        varchar nim PK
+        varchar nama_mahasiswa
+        varchar program_studi
+        varchar email
+        varchar no_telepon
+    }
+
+    PENERBIT {
+        int id_penerbit PK
+        varchar nama_penerbit
+        varchar alamat_penerbit
+        varchar kota_penerbit
+        varchar telepon_penerbit
+    }
+
+    BUKU {
+        varchar id_buku PK
+        varchar isbn
+        varchar judul_buku
+        varchar pengarang
+        year tahun_terbit
+        int stok
+        int id_penerbit FK
+    }
+
+    PEMINJAMAN {
+        int id_peminjaman PK
+        varchar nim FK
+        date tanggal_pinjam
+        date tanggal_jatuh_tempo
+    }
+
+    DETAIL_PEMINJAMAN {
+        int id_peminjaman PK, FK
+        varchar id_buku PK, FK
+        date tanggal_kembali
+        decimal denda
+        enum status
+    }
+```
+
+### Diagram Alur Relasi Kunci
+
+```mermaid
+flowchart LR
+    M[mahasiswa<br/>PK: nim] -->|nim| P[peminjaman<br/>PK: id_peminjaman<br/>FK: nim]
+    P -->|id_peminjaman| D[detail_peminjaman<br/>PK: id_peminjaman + id_buku]
+    B[buku<br/>PK: id_buku<br/>FK: id_penerbit] -->|id_buku| D
+    PB[penerbit<br/>PK: id_penerbit] -->|id_penerbit| B
+```
+
+---
