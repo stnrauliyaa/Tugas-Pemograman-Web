@@ -200,3 +200,70 @@ Setiap atribut non-kunci kini hanya bergantung pada kunci tabelnya, sehingga tid
 
 ---
 
+
+## 4. Rancangan Tabel Akhir
+
+### 4.1 Tabel `mahasiswa`
+
+| Kolom | Tipe Data | Kunci | Constraint | Keterangan |
+|---|---|---|---|---|
+| nim | VARCHAR(15) | PK | NOT NULL | Nomor induk mahasiswa |
+| nama_mahasiswa | VARCHAR(100) | | NOT NULL | Nama lengkap |
+| program_studi | VARCHAR(60) | | NOT NULL | Program studi |
+| email | VARCHAR(100) | | UNIQUE, NOT NULL | Email |
+| no_telepon | VARCHAR(15) | | NULL | Nomor telepon |
+
+### 4.2 Tabel `penerbit`
+
+| Kolom | Tipe Data | Kunci | Constraint | Keterangan |
+|---|---|---|---|---|
+| id_penerbit | INT AUTO_INCREMENT | PK | NOT NULL | Identitas penerbit |
+| nama_penerbit | VARCHAR(100) | | NOT NULL | Nama penerbit |
+| alamat_penerbit | VARCHAR(255) | | NULL | Alamat |
+| kota_penerbit | VARCHAR(50) | | NULL | Kota |
+| telepon_penerbit | VARCHAR(15) | | NULL | Telepon |
+
+### 4.3 Tabel `buku`
+
+| Kolom | Tipe Data | Kunci | Constraint | Keterangan |
+|---|---|---|---|---|
+| id_buku | VARCHAR(10) | PK | NOT NULL | Kode buku |
+| isbn | VARCHAR(20) | | UNIQUE, NOT NULL | Nomor ISBN |
+| judul_buku | VARCHAR(200) | | NOT NULL | Judul |
+| pengarang | VARCHAR(100) | | NOT NULL | Pengarang |
+| tahun_terbit | YEAR | | NOT NULL | Tahun terbit |
+| stok | INT | | NOT NULL, DEFAULT 0, CHECK (stok >= 0) | Eksemplar tersedia |
+| id_penerbit | INT | FK | NOT NULL | Referensi `penerbit.id_penerbit` |
+
+### 4.4 Tabel `peminjaman`
+
+| Kolom | Tipe Data | Kunci | Constraint | Keterangan |
+|---|---|---|---|---|
+| id_peminjaman | INT AUTO_INCREMENT | PK | NOT NULL | Nomor transaksi |
+| nim | VARCHAR(15) | FK | NOT NULL | Referensi `mahasiswa.nim` |
+| tanggal_pinjam | DATE | | NOT NULL | Tanggal pinjam |
+| tanggal_jatuh_tempo | DATE | | NOT NULL | Batas pengembalian |
+
+### 4.5 Tabel `detail_peminjaman`
+
+| Kolom | Tipe Data | Kunci | Constraint | Keterangan |
+|---|---|---|---|---|
+| id_peminjaman | INT | PK, FK | NOT NULL | Referensi `peminjaman.id_peminjaman` |
+| id_buku | VARCHAR(10) | PK, FK | NOT NULL | Referensi `buku.id_buku` |
+| tanggal_kembali | DATE | | NULL | Kosong jika belum kembali |
+| denda | DECIMAL(10,2) | | NOT NULL, DEFAULT 0 | Denda keterlambatan |
+| status | ENUM('Dipinjam','Dikembalikan','Terlambat') | | NOT NULL, DEFAULT 'Dipinjam' | Status buku |
+
+---
+
+## 5. Relasi Antar Tabel
+
+| Relasi | Kardinalitas | Foreign Key |
+|---|---|---|
+| Penerbit → Buku | 1 : N | `buku.id_penerbit` → `penerbit.id_penerbit` |
+| Mahasiswa → Peminjaman | 1 : N | `peminjaman.nim` → `mahasiswa.nim` |
+| Peminjaman → Detail_Peminjaman | 1 : N | `detail_peminjaman.id_peminjaman` → `peminjaman.id_peminjaman` |
+| Buku → Detail_Peminjaman | 1 : N | `detail_peminjaman.id_buku` → `buku.id_buku` |
+| Peminjaman ↔ Buku | M : N | diselesaikan oleh `detail_peminjaman` |
+
+---
