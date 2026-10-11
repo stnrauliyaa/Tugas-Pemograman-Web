@@ -46,4 +46,30 @@ class GuestBook
 
         return $stmt->fetchAll();
     }
+
+    
+    /**
+     * Validasi masukan. Mengembalikan array pesan galat per kolom
+     * (array kosong berarti valid).
+     */
+    public function validasi(string $nama, string $email, string $pesan): array
+    {
+        $galat = [];
+
+        if ($nama === '') {
+            $galat['nama'] = 'Nama tidak boleh kosong.';
+        } elseif (mb_strlen($nama) > 100) {
+            $galat['nama'] = 'Nama maksimal 100 karakter.';
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 150) {
+            $galat['email'] = 'Format email tidak valid.';
+        }
+
+        if (mb_strlen($pesan) < 5) {
+            $galat['pesan'] = 'Pesan minimal 5 karakter.';
+        }
+
+        return $galat;
+    }
 }
