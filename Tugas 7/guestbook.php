@@ -1,5 +1,14 @@
 <?php
 declare(strict_types=1);
+
+/**
+ * Referensi:
+ * - PHP Manual, PDO: https://www.php.net/manual/en/book.pdo.php
+ * - PHP Manual, hash_equals: https://www.php.net/manual/en/function.hash-equals.php
+ * - OWASP CSRF Prevention Cheat Sheet:
+ *   https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
+ */
+
 session_start();
 
 require_once __DIR__ . '/src/GuestBook.php';
@@ -139,14 +148,25 @@ try {
     </form>
 
     <h2>Daftar Pesan</h2>
-    
-// ---------- Ambil data untuk ditampilkan ----------
-try {
-    $daftarPesan = $guestBook->ambilSemua();
-} catch (PDOException $ex) {
-    error_log($ex->getMessage());
-    $daftarPesan   = [];
-    $galat['umum'] = 'Gagal memuat daftar pesan.';
-}
+        <?php if (empty($daftarPesan)): ?>
+        <p>Belum ada pesan.</p>
+    <?php else: ?>
+        <table>
+            <thead>
+                <tr><th>No</th><th>Nama</th><th>Email</th><th>Pesan</th><th>Tanggal Kirim</th></tr>
+            </thead>
+            <tbody>
+                <?php foreach ($daftarPesan as $i => $baris): ?>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td><?= e($baris['nama']) ?></td>
+                        <td><?= e($baris['email']) ?></td>
+                        <td><?= nl2br(e($baris['pesan'])) ?></td>
+                        <td><?= e(date('d-m-Y H:i', strtotime($baris['tanggal_kirim']))) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
 </body>
 </html>
