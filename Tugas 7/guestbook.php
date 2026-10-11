@@ -80,6 +80,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+
+// ---------- Ambil data untuk ditampilkan ----------
+try {
+    $daftarPesan = $guestBook->ambilSemua();
+} catch (PDOException $ex) {
+    error_log($ex->getMessage());
+    $daftarPesan   = [];
+    $galat['umum'] = 'Gagal memuat daftar pesan.';
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -129,5 +139,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 
     <h2>Daftar Pesan</h2>
+    
+// ---------- Ambil data untuk ditampilkan ----------
+try {
+    $daftarPesan = $guestBook->ambilSemua();
+} catch (PDOException $ex) {
+    error_log($ex->getMessage());
+    $daftarPesan   = [];
+    $galat['umum'] = 'Gagal memuat daftar pesan.';
+}
 </body>
 </html>
